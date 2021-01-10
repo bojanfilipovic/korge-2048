@@ -1,11 +1,8 @@
 package service
 
 import com.soywiz.korev.Key
-import com.soywiz.korge.html.Html
 import com.soywiz.korge.input.keys
 import com.soywiz.korge.input.onClick
-import com.soywiz.korge.ui.TextFormat
-import com.soywiz.korge.ui.TextSkin
 import com.soywiz.korge.ui.uiText
 import com.soywiz.korge.view.Stage
 import com.soywiz.korge.view.centerBetween
@@ -14,7 +11,6 @@ import com.soywiz.korge.view.position
 import com.soywiz.korge.view.roundRect
 import com.soywiz.korge.view.text
 import com.soywiz.korim.color.Colors
-import com.soywiz.korim.color.RGBA
 import com.soywiz.korim.font.BitmapFont
 import fieldSize
 import font
@@ -36,20 +32,13 @@ data class Mutables(
     var nextFreeBlockId: Int = 0
 )
 
-class GameEngine(private val mainStage: Stage) {
+class GameEngine(
+    private val mainStage: Stage,
+    private val textStyleService: TextStyleService
+) {
 
     fun showGameOver(onRestart: () -> Unit) = mainStage.container {
-        // todo bfilipovic: to textStyleService.getTextFormat()
-        val format = TextFormat(
-            color = RGBA(0, 0, 0),
-            size = 40,
-            font = Html.DefaultFontsCatalog.getBitmapFont(font)
-        )
-        val skin = TextSkin(
-            normal = format,
-            over = format.copy(color = RGBA(90, 90, 90)),
-            down = format.copy(color = RGBA(120, 120, 120))
-        )
+        val skin = textStyleService.getTextSkin()
 
         fun restart() {
             this@container.removeFromParent()

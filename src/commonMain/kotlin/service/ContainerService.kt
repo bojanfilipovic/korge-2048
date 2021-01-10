@@ -15,7 +15,6 @@ import topIndent
 
 class ContainerService {
 
-    // todo bfilipovic: could be just createContainer generic
     fun fieldContainer(container: Container): RoundRect =
         container.roundRect(fieldSize, fieldSize, RX, fill = BG_FIELD_COLOR) {
             position(leftIndent, topIndent)

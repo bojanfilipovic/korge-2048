@@ -9,6 +9,7 @@ import com.soywiz.korge.view.Stage
 import com.soywiz.korge.view.addTo
 import com.soywiz.korge.view.position
 import com.soywiz.korge.view.tween.moveTo
+import com.soywiz.korio.async.ObservableProperty
 import com.soywiz.korio.async.launchImmediately
 import com.soywiz.korma.interpolation.Easing
 import font
@@ -43,14 +44,14 @@ class BlockService(
 
     fun numberFor(blockId: Int): Number = blocks[blockId]!!.number
 
-    fun moveBlocksTo(direction: Direction) {
+    fun moveBlocksTo(direction: Direction, scoreProperty: ObservableProperty<Int>) {
         if (isAnimationRunning) return
         if (!map.hasAvailableMoves()) {
             if (!isGameOver) {
                 isGameOver = true
                 gameEngine.showGameOver {
                     isGameOver = false
-                    restart(mainStage)
+                    restart(mainStage, scoreProperty)
                 }
             }
         }
@@ -66,14 +67,16 @@ class BlockService(
                 map = newMap
                 generateBlock(mainStage)
                 isAnimationRunning = false
+                scoreProperty.update(scoreProperty.value + merges.sumBy { numberFor(it.first).value })
             }
         }
     }
 
-    fun restart(container: Container) {
+    fun restart(container: Container, scoreProperty: ObservableProperty<Int>) {
         map = PositionMap()
         blocks.values.forEach { it.removeFromParent() }
         blocks.clear()
+        scoreProperty.update(0)
         generateBlock(container)
     }
 
