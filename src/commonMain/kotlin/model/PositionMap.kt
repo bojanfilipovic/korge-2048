@@ -1,8 +1,8 @@
 package model
 
-import blocks
 import com.soywiz.kds.IntArray2
-import numberFor
+import service.BlockService
+import service.blocks
 import kotlin.random.Random
 
 data class Position(val x: Int, val y: Int)
@@ -71,7 +71,8 @@ fun calculateNewMap(
     map: PositionMap,
     direction: Direction,
     moves: MutableList<Pair<Int, Position>>,
-    merges: MutableList<Triple<Int, Int, Position>>
+    merges: MutableList<Triple<Int, Int, Position>>,
+    blockService: BlockService
     ): PositionMap {
         val newMap = PositionMap()
         val startIndex = when (direction) {
@@ -99,7 +100,7 @@ fun calculateNewMap(
                 val nextPosition = map.getNotEmptyPositionFrom(direction, line)
                 val nextId = nextPosition?.let { map[it.x, it.y] }
                 // two blocks are equal
-                if (nextId != null && numberFor(currentId) == numberFor(nextId)) {
+                if (nextId != null && blockService.numberFor(currentId) == blockService.numberFor(nextId)) {
                     // merge these blocks
                     map[nextPosition.x, nextPosition.y] = -1
                     newMap[newPosition.x, newPosition.y] = currentId

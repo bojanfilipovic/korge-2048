@@ -32,7 +32,6 @@ import utils.getDefaultCellSize
 class Block(val number: Number, private val cellSize: Double?, val font: Font) : Container() {
 
     init {
-
         GlobalScope.launch {
             withContext(Dispatchers.Default) {
                 val defaultCellSize = getDefaultCellSize(cellSize)
